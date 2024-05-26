@@ -10,7 +10,6 @@ import { Link, router } from '@inertiajs/vue3';
 const showingNavigationDropdown = ref(false);
 
 function showData(data) {
-	console.log(data);
 	if (data !== null) return data
 	else router.visit('/login');
 }
@@ -143,13 +142,55 @@ function showData(data) {
             </nav>
 
 						<div class="flex">
-							<nav class="bg-white h-screen w-[10%] py-[70px] pl-3 flex flex-col">
+							<nav class="bg-white h-screen w-[10%] py-[70px] pl-3 flex flex-col shadow-sm">
 								<NavLink :href="route('dashboard')" class="my-3">
-                    Home
+                  Home
                 </NavLink>
-								<NavLink :href="'/discover'">
-                    Discover
+								<NavLink href='#' class="my-3">
+                  Discover
                 </NavLink>
+								<NavLink href='/messages' class="my-3">
+                  Messages
+                </NavLink>
+
+								<!-- <div class="relative">
+                  <Dropdown align="right" width="48" class="relative">
+                    <template #trigger>
+                      <span class="inline-flex rounded-md">
+                        <button
+                          type="button"
+                          class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
+                        >
+                          {{ showData($page.props.auth.user?.name) }}
+
+                          <svg
+                            class="ms-2 -me-0.5 h-4 w-4"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                        </button>
+                      </span>
+                    </template>
+
+                    <template #content>
+                      <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
+                      <DropdownLink :href="route('logout')" method="post" as="button">
+                        Log Out
+                      </DropdownLink>
+                    </template>
+                  </Dropdown>
+								</div> -->
+
+								<!-- <NavLink href='/profile' class="my-3 fixed bottom-0">
+                  Profile
+                </NavLink> -->
 							</nav>
 
 							<!-- Page Content -->
