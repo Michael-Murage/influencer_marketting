@@ -83,6 +83,13 @@ Route::get('/auth/choose_signup', function () {
   return Inertia::render('Auth/ChooseSignup');
 })->name('choose_signup');
 
+Route::get('/jobs', function () {
+  return Inertia::render('Jobs');
+});
+
+Route::get('/lists', function () {
+  return Inertia::render('Lists');
+});
 
 Route::get('auth/google', [SocialController::class, 'googleRedirect']);
 Route::get('auth/google/callback', [SocialController::class, 'googleLoginOrRegister']);
