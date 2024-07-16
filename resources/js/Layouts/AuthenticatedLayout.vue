@@ -12,7 +12,7 @@ const showingNavigationDropdown = ref(false);
 
 function showData(data) {
 	if (data !== null) return data;
-	else router.visit('/login');
+	else router.visit('/auth/login');
 }
 </script>
 
@@ -41,15 +41,17 @@ function showData(data) {
     	        </div> -->
     	      </div>
 
-						<div class="flex items-center mx-3">
-							<TextInput
-								type="search"
-								name=""
-								id=""
-								placeholder="Search"
-								class="w-[350px]"
-							/>
-						</div>
+						<Link href="/search" class="flex items-center mx-3">
+							<div class="">
+								<TextInput
+									type="search"
+									name=""
+									id=""
+									placeholder="Search"
+									class="w-[350px] hover:text-green-500"
+								/>
+							</div>
+						</Link>
 
 						<div class="flex items-center mx-2">
 							<Link
@@ -172,7 +174,7 @@ function showData(data) {
       </nav>
 
 			<div class="flex">
-				<nav class="bg-white h-screen w-[10%] py-[70px] pl-3 flex flex-col shadow-sm">
+				<nav class="bg-white h-screen min-w-[10%] py-[70px] pl-3 flex flex-col shadow-sm">
 					<NavLink :href="route('dashboard')" class="my-3">
             Home
           </NavLink>
@@ -188,18 +190,23 @@ function showData(data) {
 					<NavLink href='/lists' class="my-3 text-gray-500">
             Lists
           </NavLink>
-					<Link
+					<!-- <Link
 						href='#'
 						class="inline-flex items-center px-1 py-2.5 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out"
 					>
             Campaigns
-          </Link>
+          </Link> -->
 					<Link
-						href='#'
+						href='/connections'
 						class="inline-flex items-center px-1 py-2.5 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out"
 					>
             Connections
           </Link>
+					<!-- <button
+						class="mr-3 items-center px-3.5 py-2.5 border-b-2 border-transparent text-sm font-medium leading-5 rounded-md bg-blue-500 hover:bg-blue-600 text-gray-100 dark:text-gray-400 hover:text-white dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out"
+					>
+						Subscribe
+					</button> -->
 
 					<!-- <div class="relative">
             <Dropdown align="right" width="48" class="relative">

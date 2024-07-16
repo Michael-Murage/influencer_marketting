@@ -5,9 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Connection extends Model
+class UserList extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'connector_id'];
+    protected $fillable = [
+        'title',
+        'content',
+        'user_id',
+    ];
 }

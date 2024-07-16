@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChatMessageController;
+use App\Http\Controllers\JobGigController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SocialController;
 use Illuminate\Foundation\Application;
@@ -51,6 +52,10 @@ Route::middleware('auth')->group(function () {
   Route::get('/messages', [ChatMessageController::class, 'create']);
 });
 
+Route::get('/profile/view', function () {
+  return Inertia::render('Profile/View');
+});
+
 Route::get('/brand/extra_info', function () {
   return Inertia::render('Brand/ExtraInfo');
 })->middleware(['auth'])->name('brand.extra_info');
@@ -83,12 +88,18 @@ Route::get('/auth/choose_signup', function () {
   return Inertia::render('Auth/ChooseSignup');
 })->name('choose_signup');
 
-Route::get('/jobs', function () {
-  return Inertia::render('Jobs');
-});
+Route::get('/jobs', [JobGigController::class, 'create']);
 
 Route::get('/lists', function () {
   return Inertia::render('Lists');
+});
+
+Route::get('/search', function() {
+  return Inertia::render('Search');
+});
+
+Route::get('/connections', function () {
+  return Inertia::render('Connections');
 });
 
 Route::get('auth/google', [SocialController::class, 'googleRedirect']);

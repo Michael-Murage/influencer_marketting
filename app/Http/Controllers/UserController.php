@@ -14,6 +14,17 @@ class UserController extends Controller
     return response()->json($users);
   }
 
+  public function search_users(Request $request) {
+    $search_text = $request->search;
+    
+    $search_result = User::where('name', 'like', "%$search_text%")
+                          ->orWhere('username', 'like', "%$search_text%")
+                          ->orderBy('name', 'DESC')
+                          ->get();
+
+    return response()->json($search_result);
+  }
+
     /**
      * Display the user's profile form.
      */

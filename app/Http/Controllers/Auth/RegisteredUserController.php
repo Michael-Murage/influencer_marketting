@@ -49,6 +49,7 @@ class RegisteredUserController extends Controller
 				'email' => $request->email,
 				'password' => Hash::make($request->password),
 				'user_type' => $request->type == 'Brand' ? UserRole::BRAND : UserRole::INFLUENCER,
+				'company_name' => $request->company_name,
 			]);
 	
 			event(new Registered($user));
@@ -63,7 +64,7 @@ class RegisteredUserController extends Controller
 	public function verifyInfo(Request $request) {
 		$validator = Validator::make($request->all(), [
 			'name' => ['required', 'string', 'max:255'],
-			'username' => ['required', 'string', 'regex:/^[a-zA-Z_]+$/'],
+			'username' => ['required', 'string', 'regex:/^[a-zA-Z\w]+$/'],
 			'gender' => ['required', 'string', 'max:255'],
 			'country' => ['required', 'string', 'max:255'],
 			'company_name' => ['required', 'string', 'max:255'],

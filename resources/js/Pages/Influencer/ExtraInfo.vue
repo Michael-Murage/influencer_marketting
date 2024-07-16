@@ -6,7 +6,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import SelectComp from '@/Components/SelectComp.vue';
 import { ref } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { router, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
   auth: {
@@ -17,7 +17,6 @@ const props = defineProps({
 
 const { auth } = props;
 
-// const pages = ref([1, 2, 3, 4, 5]);
 const pages = ref([1, 2, 3, 4]);
 const currentPage = ref(0);
 const form = ref({
@@ -33,7 +32,12 @@ const form = ref({
 const otherValue = ref('');
 const errors = ref({});
 const errorsVisible = ref(false);
-const data = ref(false);
+
+const fileData = useForm({
+  file: null,
+  name: '',
+  user_id: auth.user?.id,
+});
 
 const showErrors = () => {
   errorsVisible.value = true
@@ -111,7 +115,7 @@ async function submitInfo () {
 		const resp = await fetch('/api/submit_extra_info', {
 			headers: { 'Content-Type': 'application/json', accept: 'application/json' },
 			method: 'POST',
-			body: JSON.stringify(form),
+			body: JSON.stringify(form.value),
 		})
 		
 		if (resp.ok && resp.status === 200) {
@@ -124,6 +128,14 @@ async function submitInfo () {
 	} catch (error) {
 		console.warn(error.message);
 	}
+}
+
+function submitProfilePicture(e) {
+  e.preventDefault();
+  fileData.name = `${auth.user?.username?.split(' ').join('-')}-${auth.user?.id}-profilePic`;
+  fileData.user_id = auth.user?.id;
+
+  fileData.post(route("file.upload.store"));
 }
 
 function filterAttributes(item, attr) {
@@ -493,12 +505,11 @@ function filterAttributes(item, attr) {
                           </div>
                           <div className="">
                             <TextInput
+                              @change="(e) => fileData.file = e.target.files[0]"
                               type="file"
                               className="w-full px-4 py-3"
                               label="File"
                               name="file"
-                              required={required}
-                              
                             />
   
                             <!-- <span className="text-red-600">
@@ -508,6 +519,7 @@ function filterAttributes(item, attr) {
                                     
                           <div className="my-2 mx-4">
                             <button
+                              @click="submitProfilePicture"
                               type="submit"
                               class="px-6 py-2 font-bold text-white bg-green-600 rounded-md hover:text-green-600 hover:bg-gray-100"
                             >
@@ -516,11 +528,9 @@ function filterAttributes(item, attr) {
                           </div>
                         </div>
 
-                        <!-- {progress && ( -->
-                          <!-- <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700">
-                            <div className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" width={progress.percentage}> </div>
-                          </div> -->
-                        <!-- )} -->
+                        <div v-if="progress" className="w-full bg-gray-200 rounded-full dark:bg-gray-700">
+                          <div className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" :width="progress.percentage"> </div>
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -11,15 +11,11 @@ return new class extends Migration
    */
   public function up(): void
   {
-    Schema::create('job_gigs', function (Blueprint $table) {
+    Schema::create('files', function (Blueprint $table) {
       $table->id();
       $table->timestamps();
-			$table->string('name');
-			$table->text('description');
-			$table->jsonb('tags')->nullable();
-			$table->foreignId('user_id');
-			$table->bigInteger('worker_id')->nullable();
-      $table->jsonb('applicants')->nullable();
+      $table->string('name');
+      $table->foreignId('user_id');
     });
   }
 
@@ -28,6 +24,6 @@ return new class extends Migration
    */
   public function down(): void
   {
-    Schema::dropIfExists('job_gigs');
+    Schema::dropIfExists('files');
   }
 };

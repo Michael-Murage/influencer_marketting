@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\ChatConversationController;
 use App\Http\Controllers\ChatMessageController;
+use App\Http\Controllers\FileController;
+use App\Http\Controllers\JobGigController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,10 +19,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
 Route::post('verify_info', [RegisteredUserController::class, 'verifyInfo'])->name('verify_info');
 Route::get('/verifyEmail', [RegisteredUserController::class, 'verifyEmailPage']);
@@ -39,3 +37,13 @@ Route::get('/conversation_messages/{conversation_id}', [ChatConversationControll
 Route::get('/conversation_users/{conversation_id}', [ChatConversationController::class, 'conversationUsers']);
 
 Route::post('/chat_messages', [ChatMessageController::class, 'store']);
+
+Route::post('/jobs', [JobGigController::class, 'store']);
+Route::get('/jobs', [JobGigController::class, 'index']);
+
+Route::post('/profile_upload', [FileController::class, 'store'])->name('file.upload.store');
+
+Route::get('/search_users', [UserController::class, 'search_users']);
+
+Route::post('/new_campaign', [CampaignController::class, 'store']);
+Route::get('/campaigns', [CampaignController::class, 'index']);

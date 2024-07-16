@@ -189,8 +189,8 @@ function handleChecked (e) {
 
 						<PrimaryButton class="p-4 my-3 bg-transparent text-sm text-gray-900 hover:bg-transparent">
 							Already have an account?
-							<Link href="/login" v-if="form.type === 'brand'" :class="`text-blue-500 hover:underline px-2`"> Sign In!</Link>
-							<Link href="/login" v-else :class="`text-green-500 hover:underline px-2`"> Sign In!</Link>
+							<Link href="/auth/login" v-if="form.type === 'brand'" :class="`text-blue-500 hover:underline px-2`"> Sign In!</Link>
+							<Link href="/auth/login" v-else :class="`text-green-500 hover:underline px-2`"> Sign In!</Link>
 						</PrimaryButton>
 						
 						<PrimaryButton v-if="form.type === 'brand'" :class="`p-4 my-3 rounded text-gray-100 bg-green-600 hover:bg-green-500`" @click="nextPage">
