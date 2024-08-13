@@ -24,7 +24,7 @@ class File extends Model
 	protected function name(): Attribute
 	{
 		return Attribute::make(
-			get: fn ($value) => url('uploads/'.$value),
+			get: fn ($value) => url('storage/'.$value),
 		);
 	}
 }

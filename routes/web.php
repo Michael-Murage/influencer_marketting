@@ -1,9 +1,13 @@
 <?php
 
 use App\Http\Controllers\ChatMessageController;
+use App\Http\Controllers\JobGigApplicationController;
 use App\Http\Controllers\JobGigController;
+use App\Http\Controllers\ListItemController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShortListController;
 use App\Http\Controllers\SocialController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Client\Request;
@@ -50,6 +54,25 @@ Route::middleware('auth')->group(function () {
   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
   
   Route::get('/messages', [ChatMessageController::class, 'create']);
+
+
+  Route::post('/api/short_lists', [ShortListController::class, 'store']);
+  Route::get('/api/my_lists', [ShortListController::class, 'myLists']);
+  
+  Route::get('/api/suggested', [UserController::class, 'getSuggested']);
+
+  Route::post('/api/jobs', [JobGigController::class, 'store']);
+  Route::get('/api/jobs', [JobGigController::class, 'index']);
+  Route::get('/api/my_jobs', [JobGigController::class, 'myJobs']);
+  Route::get('/api/jobs/{job_id}', [JobGigController::class, 'show']);
+  Route::get('/api/my_jobs/{job_id}', [JobGigController::class, 'myJobDetails']);
+  
+  Route::post('/api/apply_job', [JobGigApplicationController::class, 'store']);
+  Route::get('/api/job_applied/{job_id}', [JobGigApplicationController::class, 'job_applied']);
+  Route::get('/api/job_applications/{job_id}', [JobGigApplicationController::class, 'getApplications']);
+
+  Route::post('/api/list_items', [ListItemController::class, 'store']);
+  Route::post('/api/list_items_by_list_ids', [ListItemController::class, 'listItemsByListId']);
 });
 
 Route::get('/profile/view', function () {
@@ -89,6 +112,9 @@ Route::get('/auth/choose_signup', function () {
 })->name('choose_signup');
 
 Route::get('/jobs', [JobGigController::class, 'create']);
+Route::get('/jobs/{job_id}', [JobGigController::class, 'singleJobPage']);
+Route::get('/my_jobs', [JobGigController::class, 'myJobsPage']);
+Route::get('/my_jobs/{job_id}', [JobGigController::class, 'viewMyJobDetails']);
 
 Route::get('/lists', function () {
   return Inertia::render('Lists');

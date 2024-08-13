@@ -14,9 +14,29 @@ class JobGigController extends Controller
    */
   public function index()
   {
-    $jobs = JobGig::
-                  paginate(20);
+    $auth_user = auth()->user();
+    $jobs = JobGig::with('userInformation')
+									->where('job_gigs.user_id', '!=', $auth_user->id)
+                  ->paginate(20);
 		return response()->json($jobs);
+  }
+
+  public function myJobs()
+  {
+    $auth_user = auth()->user();
+    $jobs = JobGig::with('userInformation')
+									->where('user_id', $auth_user->id)
+                  ->paginate(20);
+		return response()->json($jobs);
+  }
+
+  public function myJobDetails(Request $request) {
+    $auth_user = auth()->user();
+    $job = JobGig::find($request->job_id);
+
+    if ($job->user_id == $auth_user->id) {
+      return response()->json($job);
+    }
   }
 
   /**
@@ -35,12 +55,15 @@ class JobGigController extends Controller
     $request->validate([
 			'name' => 'required|string|max:255',
 			'description' => 'required|string',
+            'role' => 'required|string',
 		]);
 
 		$new_job = JobGig::create([
 			'name' => $request->name,
 			'description' => $request->description,
 			'user_id' => $request->user_id,
+            'role' => $request->role,
+            'qualifications' => $request->qualifications,
 		]);
 
 		return response()->json($new_job);
@@ -49,17 +72,23 @@ class JobGigController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(JobGig $jobGig)
+    public function show(Request $request)
     {
-        //
+      $job_gig_id = $request->job_id;
+			$job_gig = JobGig::with('userInformation')->find($job_gig_id);
+			return response()->json($job_gig);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(JobGig $jobGig)
-    {
-        //
+    public function singleJobPage() {
+			return Inertia::render('Jobs/Id');
+		}
+
+    public function myJobsPage() {
+      return Inertia::render('MyJobs/index');
+    }
+
+    public function viewMyJobDetails() {
+      return Inertia::render('MyJobs/Id');
     }
 
     /**

@@ -6,7 +6,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import requestHandler from '@/Services/requestHandler';
-import { Head, router } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { onMounted, ref } from 'vue';
 
 const props = defineProps({
@@ -17,7 +17,16 @@ const props = defineProps({
 });
 
 const [newCampaignModal, setNewCampaignModal] = [ ref(false), (bool) => newCampaignModal.value = bool];
-const [formData, setFormData] = [ref({name: '', description: ''}), (data) => formData.value = data];
+const [formData, setFormData] = [
+  {
+    name: '',
+    description: '',
+    role: '',
+    qualifications: '',
+    user_id: null,
+  }, 
+  (data) => formData.value = data
+];
 const [error, setError] = [ref({}), (err) => error.value = err];
 const [campaigns, setCampaigns] = [ref({
   current_page: 0,
@@ -40,8 +49,12 @@ onMounted(() => {
     else router.visit('/brand/extra_info');
   }
 
-  getCampaigns();
+  getJobs();
 });
+
+function getJobs() {
+  requestHandler.get('/api/jobs', setCampaigns);
+}
 
 function openNewCampaignModal() {
   setNewCampaignModal(true);
@@ -53,17 +66,19 @@ function closeNewCampaignModal() {
 
 function handleSubmit(e) {
   e.preventDefault();
-  requestHandler.post('/api/new_campaign', formData.value, afterSuccessfulCampaignCreation, setError);
+  setFormData({...formData, user_id: props.auth.user?.id});
+  requestHandler.post('/api/jobs', formData.value, afterSuccessfulCampaignCreation, setError);
 }
 
 function afterSuccessfulCampaignCreation() {
-  setFormData({name: '', description: ''});
+  setFormData({
+    name: '',
+    description: '',
+    role: '',
+    qualifications: '',
+    user_id: null,
+  });
   closeNewCampaignModal();
-  getCampaigns();
-}
-
-function getCampaigns() {
-  requestHandler.get('/api/campaigns', setCampaigns);
 }
 </script>
 
@@ -95,12 +110,14 @@ function getCampaigns() {
     <div class="flex align-center">
       <div
         v-for="campaign in campaigns.data"
-        class="shadow-md rounded bg-white min-h-[150px] m-4 px-4 py-2"
+        class="shadow-md rounded-md bg-white min-h-[150px] w-[250px] m-4 px-4 py-2"
       >
-        <h1 class="font-bold text-lg">{{ campaign.name }}</h1>
-        <div class="h-full w-full">
-          <p>{{ campaign.description }}</p>
-        </div>
+        <Link :href="`/jobs/${campaign.id}`">
+          <h1 class="font-bold text-lg">{{ campaign.name }}</h1>
+          <div class="h-full w-full">
+            <p>{{ campaign.description.slice(0, 100) }}...</p>
+          </div>
+        </Link>
       </div>
     </div>
 
@@ -145,6 +162,23 @@ function getCampaigns() {
                 :message="error.name"
               />
             </div>
+
+            <div class="mt-4">
+              <InputLabel for="role" value="Role" />
+              <TextInput
+                id="role"
+                name="role"
+                class="mt-1 block w-full"
+                v-model="formData.role"
+                required
+                autofocus
+              />
+              
+              <InputError
+                class="text-red-500 my-1 py-1"
+                :message="error.role"
+              />
+            </div>
   
             <div class="mt-4">
               <InputLabel for="description" value="Description" />
@@ -159,6 +193,21 @@ function getCampaigns() {
               />
               
               <InputError class="mt-2" :message="error.description" />
+            </div>
+
+            <div class="mt-4">
+              <InputLabel for="qualifications" value="Qualifications" />
+              <textarea
+                rows="3"
+                id="qualifications"
+                name="qualifications"
+                class="resize-none mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                v-model="formData.qualifications"
+                required
+                autofocus
+              />
+              
+              <InputError class="mt-2" :message="error.qualifications" />
             </div>
           </div>
   

@@ -25,13 +25,17 @@ class UserController extends Controller
     return response()->json($search_result);
   }
 
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request)
-    {
-
-    }
+  public function authUser(Request $request) {
+    $user = User::with('profilePic')->find($request->user()->id);
+    return response()->json($user);
+  }
+  
+  public function getSuggested(Request $request)
+  {
+    $user = auth()->user();
+    $users = User::with('profilePic')->where('id', '!=', $user->id)->paginate(10);
+    return response()->json($users);
+  }
 
     /**
      * Update the user's profile information.

@@ -6,6 +6,7 @@ use App\Http\Controllers\ChatConversationController;
 use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\JobGigController;
+use App\Http\Controllers\ShortListController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,12 +39,6 @@ Route::get('/conversation_users/{conversation_id}', [ChatConversationController:
 
 Route::post('/chat_messages', [ChatMessageController::class, 'store']);
 
-Route::post('/jobs', [JobGigController::class, 'store']);
-Route::get('/jobs', [JobGigController::class, 'index']);
-
 Route::post('/profile_upload', [FileController::class, 'store'])->name('file.upload.store');
 
 Route::get('/search_users', [UserController::class, 'search_users']);
-
-Route::post('/new_campaign', [CampaignController::class, 'store']);
-Route::get('/campaigns', [CampaignController::class, 'index']);

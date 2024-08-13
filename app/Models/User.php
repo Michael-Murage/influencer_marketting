@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -14,6 +15,26 @@ class User extends Authenticatable implements MustVerifyEmail
 
   public function jobGigs() {
     return $this->hasMany(JobGig::class);
+  }
+
+  public function files() {
+    return $this->hasMany(File::class);
+  }
+
+  public function profilePic() {
+    return $this->files()->where('name', 'LIKE', "%profilePic%");
+  }
+
+  public function listItems(): HasMany {
+    return $this->hasMany(ListItem::class);
+  }
+
+  public function shortLists(): HasMany {
+    return $this->hasMany(ShortList::class);
+  }
+
+  public function applications(): HasMany {
+    return $this->hasMany(JobGigApplication::class);
   }
 
     /**
@@ -45,6 +66,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'profile_complete',
         'info_gathering_prompted',
         'google_id',
+        'bio',
     ];
 
     /**

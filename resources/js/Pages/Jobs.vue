@@ -4,7 +4,7 @@ import Modal from '@/Components/Modal.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import { onMounted, ref, watch } from 'vue';
 import requestHandler from '@/Services/requestHandler';
 import { toast } from 'vue3-toastify';
@@ -79,22 +79,43 @@ function getJobs() {
   requestHandler.get('/api/jobs', setJobs);
 }
 
+function navigateToPage(jobId) {
+  router.visit(`/jobs/${jobId}`);
+}
+
 </script>
 
 <template>
   <AuthenticatedLayout>
     <div class="w-full flex justify-end my-3">
       <!-- <Link as="button" class="px-6"> -->
+        <Link href="/my_jobs">
+          <PrimaryButton class="mx-6 bg-green-600 rounded text-md hover:text-gray-100 focus:text-gray-100">
+            My Jobs
+          </PrimaryButton>
+        </Link>
         <PrimaryButton class="mx-6 bg-green-600 rounded text-md hover:text-gray-100 focus:text-gray-100" @click="openNewJobModal">
           Add a new Job
         </PrimaryButton>
       <!-- </Link> -->
     </div>
 
-    <div class="mt-4">
-      <div class="rounded bg-white px-5 py-4 border-b" v-for="item in jobs.data">
-        <h1 class="text-lg font-semibold text-gray-800">{{ item.name }}</h1>
-        <h1 class="text-md font-light text-gray-700">{{ item.description }}</h1>
+    <div class="mt-4 mx-4 rounded-xl">
+      <div
+        class="rounded-xl bg-white px-5 py-4 border-b flex items-center h-[100px] hover:cursor-pointer"
+        v-for="item in jobs.data"
+        @click="navigateToPage(item.id)"
+      >
+        <div class="h-full">
+          <img v-if="item.user_information?.profile_pic.length" :src="item.user_information?.profile_pic[0]?.name" alt="Profile picture" class="h-full w-[80px]" />
+          <img v-else src="/icons/circleUser.svg" alt="Profile picture icon" class="h-full w-[80px]" />
+        </div>
+        <div class="mx-6">
+          <Link :href="`/jobs/${item.id}`">
+            <h1 class="text-lg font-semibold text-gray-800 hover:underline hover:text-blue-500">{{ item.name }}</h1>
+          </Link>
+          <h1 class="text-md font-light text-gray-700">{{ item.role }}</h1>
+        </div>
       </div>
     </div>
 

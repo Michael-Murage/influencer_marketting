@@ -97,6 +97,18 @@ class RegisteredUserController extends Controller
 		$user = User::find($user_id);
 
 		if ($user) {
+			$file = \App\Models\File::where('user_id', $user->id)->where('name', 'LIKE', "%profilePic%")->first();
+			if ($file) {
+				$file = $file->id;
+			}
+			
+			$user->update([
+				'active_socials' => implode(',', $request->active_socials),
+				'interest' => implode(',', $request->interest),
+				'profession' => implode(',', $request->profession),
+				'profile_pic' => $file || null,
+			]);
+
 			$user->info_gathering_prompted = true;
 			$user->save();
 			return response()->json(["message" => "success"]);

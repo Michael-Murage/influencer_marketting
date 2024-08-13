@@ -101,7 +101,8 @@ function showData(data) {
     	            </template>
 
     	            <template #content>
-    	              <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
+    	              <!-- <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink> -->
+    	              <DropdownLink href="/profile/view"> Profile </DropdownLink>
     	              <DropdownLink :href="route('logout')" method="post" as="button">
     	                Log Out
     	              </DropdownLink>
@@ -164,7 +165,8 @@ function showData(data) {
     	      </div>
 
     	      <div class="mt-3 space-y-1">
-							<ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
+							<!-- <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink> -->
+							<ResponsiveNavLink href="/profile/view"> Profile </ResponsiveNavLink>
 							<ResponsiveNavLink :href="route('logout')" method="post" as="button">
     						Log Out
 							</ResponsiveNavLink>
@@ -178,7 +180,7 @@ function showData(data) {
 					<NavLink :href="route('dashboard')" class="my-3">
             Home
           </NavLink>
-					<NavLink href='/profile' class="my-3">
+					<NavLink href='/profile/view' class="my-3">
             Profile
           </NavLink>
 					<NavLink href='/messages' class="my-3">
@@ -190,12 +192,6 @@ function showData(data) {
 					<NavLink href='/lists' class="my-3 text-gray-500">
             Lists
           </NavLink>
-					<!-- <Link
-						href='#'
-						class="inline-flex items-center px-1 py-2.5 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out"
-					>
-            Campaigns
-          </Link> -->
 					<Link
 						href='/connections'
 						class="inline-flex items-center px-1 py-2.5 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out"
