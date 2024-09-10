@@ -34,22 +34,22 @@ class RegisteredUserController extends Controller
   public function store(Request $request)
   {
     $request->validate([
-			'country_code' => ['required', 'string'],
-			'phone_number' => ['required', 'min:9', 'max:10'],
+			// 'country_code' => ['required', 'string'],
+			// 'phone_number' => ['required', 'min:9', 'max:10'],
 			'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
       'password' => ['required', 'confirmed', Rules\Password::defaults()],
     ]);
 
 		if ($request->terms_and_conditions) {
 			$user = User::create([
-				'name' => $request->name,
-				'username' => $request->username,
-				'gender' => $request->gender,
-				'phone_number' => $request->country_code . $request->phone_number,
+				// 'name' => $request->name,
+				// 'username' => $request->username,
+				// 'gender' => $request->gender,
+				// 'phone_number' => $request->country_code . $request->phone_number,
 				'email' => $request->email,
 				'password' => Hash::make($request->password),
-				'user_type' => $request->type == 'Brand' ? UserRole::BRAND : UserRole::INFLUENCER,
-				'company_name' => $request->company_name,
+				// 'user_type' => $request->type == 'Brand' ? UserRole::BRAND : UserRole::CREATOR,
+				// 'company_name' => $request->company_name,
 			]);
 	
 			event(new Registered($user));
@@ -58,7 +58,6 @@ class RegisteredUserController extends Controller
 		} else {
 			return response()->json(['terms_and_conditions' => ['Please read and accept the terms and conditions']], 422);
 		}
-
   }
 
 	public function verifyInfo(Request $request) {

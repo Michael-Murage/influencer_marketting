@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         $interests = ['personal_finance', 'fashion', 'music', 'lifestyle', 'fitness', 'cars'];
         $professions = ['content_creator', 'podcasts', 'youtube_channel', 'musician'];
         $gender = ['male', 'female'];
-        $roles = [\App\Enums\UserRole::BRAND, \App\Enums\UserRole::INFLUENCER];
+        $roles = [\App\Enums\UserRole::BRAND, \App\Enums\UserRole::CREATOR];
 
         for ($i=0; $i < 150; $i++) { 
             \App\Models\User::create([

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('industry')->nullable();
             $table->string('website_url')->nullable();
 
-            // influencer
+            // influencer / creator
             $table->string('profession')->nullable();
             $table->string('interest')->nullable();
             $table->string('active_socials')->nullable();

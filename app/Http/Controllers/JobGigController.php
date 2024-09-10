@@ -52,18 +52,19 @@ class JobGigController extends Controller
    */
   public function store(Request $request)
   {
+    dd($request->user_id);
     $request->validate([
 			'name' => 'required|string|max:255',
 			'description' => 'required|string',
-            'role' => 'required|string',
+      'role' => 'required|string',
 		]);
-
+dump($request->name);
 		$new_job = JobGig::create([
 			'name' => $request->name,
 			'description' => $request->description,
 			'user_id' => $request->user_id,
-            'role' => $request->role,
-            'qualifications' => $request->qualifications,
+      'role' => $request->role,
+      'qualifications' => $request->qualifications,
 		]);
 
 		return response()->json($new_job);

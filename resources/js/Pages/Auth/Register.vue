@@ -117,12 +117,12 @@ function handleChecked (e) {
 
 				<div class="text-center">
 					<h1 :class="`text-[40px] font-semibold font-[Helvetica]`">
-						<span v-if="form.type === 'brand'" class="text-green-600">BRAND ONBOARDING</span>
-						<span v-else class="text-blue-600">INFLUENCER ONBOARDING</span>
+						<span class="text-gray-900 font-bold text-[30px] uppercase">Signup To Fuss</span>
+						<!-- <span v-else class="text-blue-600">CREATOR ONBOARDING</span> -->
 					</h1>
 				</div>
 
-				<div class="py-3" v-if="currentPage === 0">
+				<!-- <div class="py-3" v-if="currentPage === 0">
 					<div>
 						<TextInput
 							id="name"
@@ -184,7 +184,7 @@ function handleChecked (e) {
 
 					<div class="flex justify-between">
 						<PrimaryButton v-if="form.type === 'brand'" :class="`p-4 my-3 bg-transparent text-blue-500 text-sm hover:underline hover:bg-transparent focus:bg-transparent focus:outline-none`" @click="switchToInfluencer">
-							Sign up as an Influencer instead
+							Sign up as a Creator instead
 						</PrimaryButton>
 
 						<PrimaryButton class="p-4 my-3 bg-transparent text-sm text-gray-900 hover:bg-transparent">
@@ -201,10 +201,10 @@ function handleChecked (e) {
 							CONTINUE
 						</PrimaryButton>
 					</div>
-				</div>
+				</div> -->
 
-				<div class="py-3" v-else-if="currentPage === 1">
-					<div>
+				<div class="py-3">
+					<!-- <div>
 						<div class="ml-auto">
 							<SelectComp v-model="form.country_code" class="w-[30%]" placeholder="Code">
 								<option v-for="country in countries.sort((a,b) => a.dial_code - b.dial_code)" :value="country.dial_code" :key="country.id">
@@ -223,9 +223,9 @@ function handleChecked (e) {
 						</div>
 
 						<InputError class="mt-2" v-for="error in (errors.country_code || errors.phone_number || [])" :key="error" :message="(error)" />
-					</div>
+					</div> -->
 
-					<div>
+					<div class="py-2 mb-2">
 						<TextInput
 							id="email"
 							type="email"
@@ -238,7 +238,7 @@ function handleChecked (e) {
 						<InputError class="mt-2" v-for="error in (errors.email || [])" :key="error" :message="(error)" />
 					</div>
 
-					<div>
+					<div class="py-2 mb-2">
 						<TextInput
 							id="password"
 							type="password"
@@ -251,7 +251,7 @@ function handleChecked (e) {
 						<InputError class="mt-2" v-for="error in (errors.password || errors.errors?.password || [])" :key="error" :message="(error)" />
 					</div>
 
-					<div>
+					<div class="py-2 mb-2">
 						<TextInput
 							id="password_confirmation"
 							type="password"
@@ -264,37 +264,39 @@ function handleChecked (e) {
 						<InputError class="mt-2" v-for="error in (errors.password_confirmation || [])" :key="error" :message="(error)" />
 					</div>
 
-					<div class="flex justify-between">
-						<PrimaryButton class="p-4 my-8 bg-gray-500 text-gray-100 rounded" @click="prevPage">
+					<div class="flex justify-between items-center">
+						<!-- <PrimaryButton class="p-4 my-8 bg-gray-500 text-gray-100 rounded" @click="prevPage">
 							Previous Page
-						</PrimaryButton>
+						</PrimaryButton> -->
 
-						<PrimaryButton v-if="form.type === 'brand'" :class="`p-4 my-8 rounded text-gray-100 bg-green-600 hover:bg-green-500`" @click="submit">
+						<!-- <PrimaryButton v-if="form.type === 'brand'" :class="`p-4 my-8 rounded text-gray-100 bg-green-600 hover:bg-green-500`" @click="submit">
 							CREATE ACCOUNT
-						</PrimaryButton>
-						
-						<PrimaryButton v-else :class="`p-4 my-8 rounded text-gray-100 bg-blue-600 hover:bg-blue-500`" @click="submit">
-							CREATE ACCOUNT
-						</PrimaryButton>
-					</div>
-					<div class="flex flex-col">
-						<div class="flex justify-start items-center">
-							<TextInput
-								id="terms_and_conditions"
-								type="checkbox"
-								name="terms_and_conditions"
-								class=""
-								@change="handleChecked"
-								autocomplete="terms_and_conditions"
-							/>
-	
-							<InputLabel class="px-3">
-								Read and Accept our <a href="#" class="text-blue-500 hover:underline">terms and conditions</a>
-							</InputLabel>
+						</PrimaryButton> -->
+
+						<div class="flex flex-col">
+							<div class="flex justify-start items-center">
+								<TextInput
+									id="terms_and_conditions"
+									type="checkbox"
+									name="terms_and_conditions"
+									class=""
+									@change="handleChecked"
+									autocomplete="terms_and_conditions"
+								/>
+
+								<InputLabel class="px-3">
+									Read and Accept our <a href="#" class="text-blue-500 hover:underline">terms and conditions</a>
+								</InputLabel>
+							</div>
+
+							<InputError class="mt-2" v-for="error in (errors.terms_and_conditions || [])" :key="error" message="Please read and accept the terms and conditions to continue" />
 						</div>
 
-						<InputError class="mt-2" v-for="error in (errors.terms_and_conditions || [])" :key="error" message="Please read and accept the terms and conditions to continue" />
+						<PrimaryButton :class="`p-4 my-8 rounded text-gray-100 bg-blue-600 hover:bg-green-500`" @click="submit">
+							CREATE ACCOUNT
+						</PrimaryButton>
 					</div>
+					
 				</div>
 			</form>
         

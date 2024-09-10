@@ -6,7 +6,8 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import SelectComp from '@/Components/SelectComp.vue';
 import { ref } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
+import countries from '@/Assets/countries';
 
 const props = defineProps({
   auth: {
@@ -20,10 +21,17 @@ const currentPage = ref(0);
 const { auth } = props;
 const form = ref({
 	active_socials: [],
+	name: '',
+	username: '',
+	gender: '',
+	country: '',
+	company_name: '',
+	type: '',
 });
 const errors = ref({});
 const errorsVisible = ref(false);
 const data = ref(false);
+const genders = ref(['Male', 'Female', 'Other']);
 
 const showErrors = () => {
   errorsVisible.value = true
@@ -55,10 +63,10 @@ function handleArrayChange(e, attr) {
   }
 }
 
-function nextPage () {
-  if (currentPage.value < pages.value.length - 1) currentPage.value = currentPage.value + 1
-  else submitInfo();
-}
+// function nextPage () {
+//   if (currentPage.value < pages.value.length - 1) currentPage.value = currentPage.value + 1
+//   else submitInfo();
+// }
 
 async function skipProcess () {
   // console.log(auth.user.id)
@@ -104,6 +112,33 @@ async function submitInfo () {
 		console.warn(error.message);
 	}
 }
+
+async function nextPage (e) {
+	e.preventDefault();
+	try {
+		const resp = await fetch('/api/verify_info', {
+			headers: { 'Content-Type': 'application/json', accept: 'application/json' },
+			method: 'POST',
+			body: JSON.stringify({
+				name: form.name,
+				username: form.username,
+				page: currentPage.value,
+				gender: form.gender,
+				country: form.country,
+				company_name: form.company_name
+			}),
+		});
+		
+		if (resp.ok && resp.status === 200) {
+			if (currentPage.value < pages.value.length - 1) currentPage.value = currentPage.value + 1
+		} else {
+			const errJson = await resp.json();
+			errors.value = errJson;
+		}
+	} catch (error) {
+		console.warn(error.message);
+	}
+}
 </script>
 
 <template>
@@ -118,12 +153,119 @@ async function submitInfo () {
 	
 					<div class="bg-gray-200 w-[300px] h-[200px] mx-[30px] my-[10px] rounded-lg"></div>
 				</div>
+
+				<div class="py-3" v-if="currentPage === 0">
+					<div class="flex flex-col">
+						<InputLabel>Sign Up As</InputLabel>
+						<div class="flex items-center mb-4">
+							<TextInput id="default-radio-1" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+							<InputLabel for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Default radio</InputLabel>
+						</div>
+						<div class="flex items-center">
+							<TextInput checked id="default-radio-2" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+							<InputLabel for="default-radio-2" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Checked state</InputLabel>
+						</div>
+					</div>
+					<!-- <div id="accountType" name="accountType">
+						<
+							name="accountType"
+							type="radio"
+							class="mt-3 block w-full"
+							v-model="form.type"
+							autocomplete="name"
+							placeholder="Sign up as"
+						/>
+					</div> -->
+						<!-- <SelectComp v-model="form.type" class="mt-3 block w-full" placeholder="Signup ">
+							<option v-for="gender in genders" :key="gender" :value="gender">
+								{{ gender }}
+							</option>
+						</SelectComp> -->
+					<div>
+						<TextInput
+							id="name"
+							type="text"
+							class="mt-3 block w-full"
+							v-model="form.name"
+							autocomplete="name"
+							placeholder="Name"
+						/>
+
+						<InputError class="mt-2" v-for="error in (errors.name || [])" :key="error" :message="(error)" />
+					</div>
+
+					<div>
+						<TextInput
+							id="username"
+							type="text"
+							class="mt-3 block w-full"
+							v-model="form.username"
+							autocomplete="username"
+							placeholder="Username"
+						/>
+
+						<InputError class="mt-2" v-for="error in (errors.username || [])" :key="error" :message="(error)" />
+					</div>
+
+					<div>
+						<SelectComp v-model="form.gender" class="mt-3 block w-full" placeholder="Select Gender">
+							<option v-for="gender in genders" :key="gender" :value="gender">
+								{{ gender }}
+							</option>
+						</SelectComp>
+
+						<InputError class="mt-2" v-for="error in (errors.gender || [])" :key="error" :message="(error)" />
+					</div>
+
+					<div>
+						<SelectComp v-model="form.country" class="mt-3 block w-full" placeholder="Select Country">
+							<option v-for="country in countries.sort((a, b) => a.name - b.name)" :value="country.name" :key="country.id">
+								{{ country.emoji }}  {{ country.name }}
+							</option>
+						</SelectComp>
+
+						<InputError class="mt-2" v-for="error in (errors.country || [])" :key="error" :message="(error)" />
+					</div>
+
+					<div>
+						<TextInput
+							id="company_name"
+							type="text"
+							class="mt-3 block w-full"
+							v-model="form.company_name"
+							autocomplete="company_name"
+							placeholder="Company Name"
+						/>
+
+						<InputError class="mt-2" v-for="error in (errors.company_name || [])" :key="error" :message="(error)" />
+					</div>
+
+					<div class="flex justify-between">
+						<!-- <PrimaryButton v-if="form.type === 'brand'" :class="`p-4 my-3 bg-transparent text-blue-500 text-sm hover:underline hover:bg-transparent focus:bg-transparent focus:outline-none`" @click="switchToInfluencer">
+							Sign up as a Creator instead
+						</PrimaryButton>
+
+						<PrimaryButton class="p-4 my-3 bg-transparent text-sm text-gray-900 hover:bg-transparent">
+							Already have an account?
+							<Link href="/auth/login" v-if="form.type === 'brand'" :class="`text-blue-500 hover:underline px-2`"> Sign In!</Link>
+							<Link href="/auth/login" v-else :class="`text-green-500 hover:underline px-2`"> Sign In!</Link>
+						</PrimaryButton> -->
+						
+						<PrimaryButton v-if="form.type === 'brand'" :class="`p-4 my-3 rounded text-gray-100 bg-green-600 hover:bg-green-500`" @click="nextPage">
+							CONTINUE
+						</PrimaryButton>
+						
+						<PrimaryButton v-else :class="`p-4 my-3 rounded text-gray-100 bg-blue-600 hover:bg-blue-500`" @click="nextPage">
+							CONTINUE
+						</PrimaryButton>
+					</div>
+				</div>
 	
-				<div class="bg-white pt-[30px]">
+				<!-- <div class="bg-white pt-[30px]">
 					<p class="font-bold mx-6 text-[30px]" v-if="auth.user">
             Welcome <span>{{ auth.user.name }}</span>
           </p>
-					<!-- <p class="text-gray-500 mx-6 mt-4 mb-5">All fields are required</p> -->
+					// <p class="text-gray-500 mx-6 mt-4 mb-5">All fields are required</p>
 	
 					<div class="flex flex-col">
 						<div class="flex justify-between">
@@ -134,10 +276,10 @@ async function submitInfo () {
 								<select-comp class="w-full">
 									<option value="business_owner">Business Owner</option>
 									<option value="marketing">Marketing</option>
-									<!-- <option value="agent">Agent</option> -->
+									// <option value="agent">Agent</option>
 									<option value="youtuber">Youtuber</option>
-									<!-- <option value=""></option> -->
-									<!-- <option value=""></option> -->
+									// <option value=""></option>
+									// <option value=""></option>
 								</select-comp>
 							</div>
 
@@ -151,8 +293,8 @@ async function submitInfo () {
 									<option value="fashion_and_design">Fashion and Design</option>
 									<option value="content_creation">Content Creation</option>
 									<option value="social_media">Social Media</option>
-									<!-- <option value=""></option> -->
-									<!-- <option value=""></option> -->
+									// <option value=""></option>
+									// <option value=""></option>
 								</select-comp>
 							</div>
 						</div>
@@ -167,8 +309,8 @@ async function submitInfo () {
 									<option value="10 - 50">10 - 50 persons</option>
 									<option value="50 - 100">50 - 100 persons</option>
 									<option value="> 100">> 100 persons</option>
-									<!-- <option value=""></option> -->
-									<!-- <option value=""></option> -->
+									// <option value=""></option>
+									// <option value=""></option>
 								</select-comp>
 							</div>
 								
@@ -300,7 +442,7 @@ async function submitInfo () {
               	          <div className="flex flex-row">
               	            <div className="py-2">
 														
-              	              <!-- <h2 className='weight-heavy py-2'>{data.title}</h2> -->
+              	              // <h2 className='weight-heavy py-2'>{data.title}</h2>
               	            </div>
               	            <div className="">
               	              <TextInput
@@ -312,9 +454,9 @@ async function submitInfo () {
 														
               	              />
 														
-              	              <!-- <span className="text-red-600">
+              	              // <span className="text-red-600">
               	                {errors.file}
-              	              </span> -->
+              	              // </span>
               	            </div>
 													
               	            <div className="my-2 mx-4">
@@ -327,11 +469,11 @@ async function submitInfo () {
               	            </div>
               	          </div>
 												
-              	          <!-- {progress && ( -->
-              	            <!-- <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700">
+              	          // {progress && (
+              	            // <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700">
               	              <div className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" width={progress.percentage}> </div>
-              	            </div> -->
-              	          <!-- )} -->
+              	            </div>
+              	          // )}
               	        </div>
               	      </div>
               	    </div>
@@ -358,7 +500,7 @@ async function submitInfo () {
               </div>
             </div>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</GuestLayout>

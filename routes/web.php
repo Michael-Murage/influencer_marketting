@@ -62,7 +62,7 @@ Route::middleware('auth')->group(function () {
   Route::get('/api/suggested', [UserController::class, 'getSuggested']);
 
   Route::post('/api/jobs', [JobGigController::class, 'store']);
-  Route::get('/api/jobs', [JobGigController::class, 'index']);
+  // Route::get('/api/jobs', [JobGigController::class, 'index']);
   Route::get('/api/my_jobs', [JobGigController::class, 'myJobs']);
   Route::get('/api/jobs/{job_id}', [JobGigController::class, 'show']);
   Route::get('/api/my_jobs/{job_id}', [JobGigController::class, 'myJobDetails']);

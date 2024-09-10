@@ -42,3 +42,5 @@ Route::post('/chat_messages', [ChatMessageController::class, 'store']);
 Route::post('/profile_upload', [FileController::class, 'store'])->name('file.upload.store');
 
 Route::get('/search_users', [UserController::class, 'search_users']);
+
+Route::get('/api/jobs', [JobGigController::class, 'index']);
